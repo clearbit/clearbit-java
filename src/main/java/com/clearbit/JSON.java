@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
@@ -39,10 +40,10 @@ public class JSON {
    * Deserialize the given JSON string to Java object.
    *
    * @param body The JSON string
-   * @param returnType The type to deserialize inot
+   * @param returnType The type to deserialize into
    * @return The deserialized Java object
    */
-  public <T> T deserialize(String body, TypeRef<?> returnType) throws ApiException {
+  public <T> T deserialize(String body, TypeRef<T> returnType) throws ApiException {
     JavaType javaType = mapper.constructType(returnType.getType());
     try {
       return mapper.readValue(body, javaType);
@@ -53,4 +54,21 @@ public class JSON {
         throw new ApiException(500, e.getMessage(), null, body);
     }
   }
+
+  public <T> T deserialize(JsonNode body, Class<T> returnType) throws ApiException {
+    try {
+      return mapper.treeToValue(body, returnType);
+    } catch (IOException e) {
+      throw new ApiException(500, e.getMessage(), null, null);
+    }
+  }
+  
+  public JsonNode deserialize(String body) throws ApiException {
+    try {
+      return mapper.readTree(body);
+    } catch (IOException e) {
+      throw new ApiException(500, e.getMessage(), null, body);
+    }
+  }
+
 }

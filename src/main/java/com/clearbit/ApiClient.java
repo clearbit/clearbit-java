@@ -331,7 +331,7 @@ public class ApiClient {
   /**
    * Deserialize response body to Java object according to the Content-Type.
    */
-  public <T> T deserialize(ClientResponse response, TypeRef returnType) throws ApiException {
+  public <T> T deserialize(ClientResponse response, TypeRef<T> returnType) throws ApiException {
     String contentType = null;
     List<String> contentTypes = response.getHeaders().get("Content-Type");
     if (contentTypes != null && !contentTypes.isEmpty())
@@ -469,14 +469,15 @@ public class ApiClient {
    * @param authNames The authentications to apply
    * @return The response body in type of string
    */
-   public <T> T invokeAPI(String path, String method, List<Pair> queryParams, Object body, byte[] binaryBody, Map<String, String> headerParams, Map<String, Object> formParams, String accept, String contentType, String[] authNames, TypeRef returnType) throws ApiException {
+   public <T> T invokeAPI(String path, String method, List<Pair> queryParams, Object body, byte[] binaryBody, Map<String, String> headerParams, Map<String, Object> formParams, String accept, String contentType, String[] authNames, TypeRef<T> returnType) throws ApiException {
 
     ClientResponse response = getAPIResponse(path, method, queryParams, body, binaryBody, headerParams, formParams, accept, contentType, authNames);
 
     statusCode = response.getStatusInfo().getStatusCode();
     responseHeaders = response.getHeaders();
 
-    if(response.getStatusInfo() == ClientResponse.Status.NO_CONTENT) {
+    if(statusCode == ClientResponse.Status.NOT_FOUND.getStatusCode()
+        || statusCode == ClientResponse.Status.ACCEPTED.getStatusCode()) {
       return null;
     } else if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
       if (returnType == null)
