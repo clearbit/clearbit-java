@@ -42,7 +42,9 @@ public class Person {
   private static class Geo {
     @JsonProperty String city;
     @JsonProperty String state;
+    @JsonProperty String stateCode;
     @JsonProperty String country;
+    @JsonProperty String countryCode;
     @JsonProperty String lat;
     @JsonProperty String lng;
   }
