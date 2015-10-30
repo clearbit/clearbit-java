@@ -29,18 +29,19 @@ public class CompanyApi {
   }
 
   /**
-   * Person API
-   * The Person API lets you retrieve social information associated with an email address, such as a person’s name, location and Twitter handle.
-   * @param email the person’s email address
-   * @return Person
+   * The Company API lets you lookup company data via a domain name.
+   * This is a blocking operation. If the company is not in the Clearbit database,
+   * the connection will be held open until the lookup has completed. Typically 3-5 seconds.
+   * @param domain the company's website domain
+   * @return Company
    */
-  public Company stream(String domain) throws ApiException {
+  public Company streamingLookup(String domain) throws ApiException {
     Object postBody = null;
     byte[] postBinaryBody = null;
     
-     // verify the required parameter 'email' is set
+     // verify the required parameters are set
      if (domain == null) {
-        throw new ApiException(400, "Missing the required parameter 'domain' when calling CompanyApi.stream");
+        throw new ApiException(400, "Missing the required parameter 'domain' when calling CompanyApi.streamingLookup");
      }
      
     // create path and map variables
@@ -50,17 +51,49 @@ public class CompanyApi {
     List<Pair> queryParams = new ArrayList<Pair>();
     Map<String, String> headerParams = new HashMap<String, String>();
     Map<String, Object> formParams = new HashMap<String, Object>();
-
-    final String[] accepts = {};
-    final String accept = apiClient.selectHeaderAccept(accepts);
-
-    final String[] contentTypes = {};
-    final String contentType = apiClient.selectHeaderContentType(contentTypes);
+    String accept = apiClient.selectHeaderAccept(new String[]{});
+    String contentType = apiClient.selectHeaderContentType(new String[]{});
 
     String[] authNames = new String[] { "Basic Authentication" };
 
     TypeRef<Company> returnType = new TypeRef<Company>() {};
     return apiClient.invokeAPI(path, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
   }
-  
+
+  /**
+   * Company API
+   * The Company API lets you lookup company data via a domain name.
+   * @param domain the company's website domain
+   * @return Company
+   */
+  public Company lookup(String domain, String webhookId) throws ApiException {
+    Object postBody = null;
+    byte[] postBinaryBody = null;
+    
+     // verify the required parameters are set
+     if (domain == null) {
+        throw new ApiException(400, "Missing the required parameter 'domain' when calling CompanyApi.lookup");
+     }
+     
+    // create path and map variables
+    String path = "https://company.clearbit.com/v1/companies/domain/{domain}"
+        .replaceAll("\\{" + "domain" + "\\}", apiClient.escapeString(domain.toString()));
+
+    if (webhookId != null) {
+      path += "?webhook_id=" + apiClient.escapeString(webhookId.toString());
+    }
+
+    // query params
+    List<Pair> queryParams = new ArrayList<Pair>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+    Map<String, Object> formParams = new HashMap<String, Object>();
+    String accept = apiClient.selectHeaderAccept(new String[]{});
+    String contentType = apiClient.selectHeaderContentType(new String[]{});
+
+    String[] authNames = new String[] { "Basic Authentication" };
+
+    TypeRef<Company> returnType = new TypeRef<Company>() {};
+    return apiClient.invokeAPI(path, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
+  }
+
 }
