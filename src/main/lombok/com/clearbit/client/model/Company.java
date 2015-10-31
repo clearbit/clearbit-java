@@ -32,13 +32,13 @@ public class Company {
   @JsonProperty List<String> tech;
 
   @Data
-  private static class Site {
+  public static class Site {
     @JsonProperty String url;
     @JsonProperty String title;
   }
 
   @Data
-  private static class Category {
+  public static class Category {
     @JsonProperty String sector;
     @JsonProperty String industryGroup;
     @JsonProperty String industry;
@@ -46,7 +46,7 @@ public class Company {
   }
 
   @Data
-  private static class Geo {
+  public static class Geo {
     @JsonProperty String streetNumber;
     @JsonProperty String streetName;
     @JsonProperty String subPremise;
@@ -56,12 +56,12 @@ public class Company {
     @JsonProperty String postalCode;
     @JsonProperty String country;
     @JsonProperty String countryCode;
-    @JsonProperty String lat;
-    @JsonProperty String lng;
+    @JsonProperty Double lat;
+    @JsonProperty Double lng;
   }
 
   @Data
-  private static class Metrics {
+  public static class Metrics {
     @JsonProperty Long raised;
     @JsonProperty Long googleRank;
     @JsonProperty Long alexaUsRank;
@@ -71,17 +71,17 @@ public class Company {
   }
   
   @Data
-  private static class Facebook {
+  public static class Facebook {
     @JsonProperty String handle;
   }
 
   @Data
-  private static class LinkedIn {
+  public static class LinkedIn {
     @JsonProperty String handle;
   }
 
   @Data
-  private static class Twitter {
+  public static class Twitter {
     @JsonProperty String handle;
     @JsonProperty String id;
     @JsonProperty String bio;
@@ -93,7 +93,7 @@ public class Company {
   }
 
   @Data
-  private static class AngelList {
+  public static class AngelList {
     @JsonProperty String handle;
     @JsonProperty String bio;
     @JsonProperty String blog;
@@ -103,7 +103,7 @@ public class Company {
   }
 
   @Data
-  private static class Crunchbase {
+  public static class Crunchbase {
     @JsonProperty String handle;
   }
 }
