@@ -10,6 +10,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.clearbit.ApiException;
 import com.clearbit.JSON;
+import com.clearbit.client.model.Company;
+import com.clearbit.client.model.Person;
+import com.clearbit.client.model.Type;
 import com.clearbit.client.model.WebhookResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -22,8 +25,14 @@ public class WebhookResponseParser {
     this.apiKey = apiKey;
   }
 
-  public <T> WebhookResponse<T> parse(String body, String xRequestSignature, Class<T> returnType) throws ApiException {
-    String signature = xRequestSignature.startsWith("sha1=") ? xRequestSignature.substring(5) : xRequestSignature;
+  /**
+   * @param body the request body
+   * @param xRequestSignatureHeader value of the "X-Request-Signature" header
+   */
+  public WebhookResponse parse(String body, String xRequestSignatureHeader) throws ApiException {
+    String signature = xRequestSignatureHeader.startsWith("sha1=")
+        ? xRequestSignatureHeader.substring(5)
+        : xRequestSignatureHeader;
     try {
       if (!signature.equals(hmacSha1(body, apiKey))) {
         throw new ApiException(401, "bad hmac-sha1 signature");
@@ -35,21 +44,23 @@ public class WebhookResponseParser {
     } catch (NoSuchAlgorithmException e) {
       throw new IllegalStateException("this can't ever happen", e);
     }
-    
+
     JsonNode node = json.deserialize(body);
-    WebhookResponse<T> response = new WebhookResponse<T>();
-    if (node.has("body")) {
-      response.setBody(json.deserialize(node.get("body"), returnType));
+    WebhookResponse response = new WebhookResponse();
+    Type type = Type.valueOf(node.get("type").asText().toUpperCase());
+    response.setType(type);
+    switch (type) {
+      case PERSON:
+        response.setBody(json.deserialize(node.get("body"), Person.class));
+        break;
+      case COMPANY:
+        response.setBody(json.deserialize(node.get("body"), Company.class));
+        break;
+      default:
+        throw new ApiException("Unexpected type: " + type);
     }
-    if (node.has("id")) {
-      response.setId(node.get("id").asText());
-    }
-    if (node.has("status")) {
-      response.setStatus(node.get("status").asInt());
-    }
-    if (node.has("type")) {
-      response.setType(node.get("type").asText());
-    }
+    response.setId(node.get("id").asText());
+    response.setStatus(node.get("status").asInt());
     return response;
   }
 
