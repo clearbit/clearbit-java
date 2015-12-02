@@ -66,12 +66,12 @@ public class WebhookResponseParser {
 
   private String hmacSha1(String data, String key)
       throws SignatureException, NoSuchAlgorithmException, InvalidKeyException {
-      SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), "HmacSHA1");
-      Mac mac = Mac.getInstance("HmacSHA1");
-      mac.init(signingKey);
-      return toHexString(mac.doFinal(data.getBytes()));
+    SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), "HmacSHA1");
+    Mac mac = Mac.getInstance("HmacSHA1");
+    mac.init(signingKey);
+    return toHexString(mac.doFinal(data.getBytes()));
   }
-  
+
   private static String toHexString(byte[] bytes) {
     Formatter formatter = new Formatter();
     try {
