@@ -13,11 +13,8 @@ Authorize requests by setting the API key found on your [account's settings page
 
 ```java
 final String clearbit_key = System.getenv("CLEARBIT_KEY");
-
 CompanyApi api = new CompanyApi();
-
 api.getApiClient().setUsername(clearbit_key);
-
 Company company = api.streamingLookup("clearbit.com");
 ```
 
