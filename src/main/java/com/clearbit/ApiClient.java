@@ -598,9 +598,11 @@ public class ApiClient {
   /**
    * Get an existing client or create a new client to handle HTTP request.
    */
-  private Client getClient() {
+  public Client getClient() {
     if(!hostMap.containsKey(basePath)) {
       Client client = Client.create();
+      client.setConnectTimeout(10_000);
+      client.setReadTimeout(20_000);
       if (debugging)
         client.addFilter(new LoggingFilter());
       hostMap.put(basePath, client);
