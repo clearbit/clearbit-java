@@ -4,12 +4,12 @@
   <artifactId>client</artifactId>
   <packaging>jar</packaging>
   <name>client</name>
-  <version>0.2</version>
+  <version>0.2-SNAPSHOT</version>
   <scm>
     <connection>scm:git:git@github.com:clearbit/clearbit-java.git</connection>
     <developerConnection>scm:git:git@github.com:clearbit/clearbit-java.git</developerConnection>
     <url>https://github.com/clearbit/clearbit-java</url>
-    <tag>client-0.2</tag>
+    <tag>HEAD</tag>
   </scm>
   <licenses>
     <license>
