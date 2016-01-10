@@ -4,7 +4,7 @@
   <artifactId>client</artifactId>
   <packaging>jar</packaging>
   <name>client</name>
-  <version>0.4</version>
+  <version>0.5-SNAPSHOT</version>
   <scm>
     <connection>scm:git:git@github.com:clearbit/clearbit-java.git</connection>
     <developerConnection>scm:git:git@github.com:clearbit/clearbit-java.git</developerConnection>
