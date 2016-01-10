@@ -21,12 +21,6 @@
     <maven>2.2.0</maven>
   </prerequisites>
 
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>9</version>
-  </parent>
-
   <profiles>
     <profile>
       <id>doclint-java8-disable</id>
