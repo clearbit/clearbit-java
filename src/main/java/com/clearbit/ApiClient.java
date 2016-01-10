@@ -601,8 +601,8 @@ public class ApiClient {
   public Client getClient() {
     if(!hostMap.containsKey(basePath)) {
       Client client = Client.create();
-      client.setConnectTimeout(10_000);
-      client.setReadTimeout(20_000);
+      client.setConnectTimeout(10000);
+      client.setReadTimeout(20000);
       if (debugging)
         client.addFilter(new LoggingFilter());
       hostMap.put(basePath, client);
