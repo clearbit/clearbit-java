@@ -352,6 +352,10 @@ public class ApiClient {
     }
   }
 
+  public <T> T deserialize(String strVal, TypeRef<T> returnType) throws ApiException {
+      return json.deserialize(strVal, returnType);
+  }
+
   private ClientResponse getAPIResponse(String path, String method, List<Pair> queryParams, Object body, byte[] binaryBody, Map<String, String> headerParams, Map<String, Object> formParams, String accept, String contentType, String[] authNames) throws ApiException {
 
     if (body != null && binaryBody != null){
