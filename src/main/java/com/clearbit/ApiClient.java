@@ -2,6 +2,9 @@ package com.clearbit;
 
 import com.clearbit.auth.Authentication;
 import com.clearbit.auth.HttpBasicAuth;
+import com.clearbit.client.model.Company;
+import com.clearbit.client.model.Person;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource.Builder;
@@ -330,6 +333,17 @@ public class ApiClient {
     }
   }
 
+  public Map<String, Object> deserializeFromByteArray(byte[] byteArray) throws ApiException {
+    String serialized = new String(byteArray);
+    JsonNode nodes = json.deserialize(serialized);
+    Person person = json.deserialize(nodes.get("person"), Person.class);
+    Company company = json.deserialize(nodes.get("company"), Company.class);
+    Map<String, Object> ret = new HashMap<String, Object>();
+    ret.put("PERSON", person);
+    ret.put("COMPANY", company);
+
+    return ret;
+  }
 
     public <T> T deserializeFromByteBuffer(ByteBuffer byteBuffer, TypeRef<T> returnType) throws ApiException {
         byte[] ba = byteBuffer.array();
