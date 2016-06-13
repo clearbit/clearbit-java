@@ -336,6 +336,10 @@ public class ApiClient {
   public Map<String, Object> deserializeFromByteArray(byte[] byteArray) throws ApiException {
     String serialized = new String(byteArray);
     JsonNode nodes = json.deserialize(serialized);
+    if (nodes.get("body") != null) {
+        nodes = nodes.get("body");
+    }
+
     Person person = json.deserialize(nodes.get("person"), Person.class);
     Company company = json.deserialize(nodes.get("company"), Company.class);
     Map<String, Object> ret = new HashMap<String, Object>();
