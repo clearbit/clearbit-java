@@ -507,8 +507,7 @@ public class ApiClient {
     statusCode = response.getStatusInfo().getStatusCode();
     responseHeaders = response.getHeaders();
 
-    if(statusCode == ClientResponse.Status.NOT_FOUND.getStatusCode()
-        || statusCode == ClientResponse.Status.ACCEPTED.getStatusCode()) {
+    if(statusCode == ClientResponse.Status.ACCEPTED.getStatusCode()) {
       return null;
     } else if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
       if (returnType == null)
