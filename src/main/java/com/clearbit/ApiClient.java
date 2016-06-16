@@ -340,11 +340,16 @@ public class ApiClient {
         nodes = nodes.get("body");
     }
 
-    Person person = json.deserialize(nodes.get("person"), Person.class);
-    Company company = json.deserialize(nodes.get("company"), Company.class);
     Map<String, Object> ret = new HashMap<String, Object>();
-    ret.put("PERSON", person);
-    ret.put("COMPANY", company);
+    if (nodes.get("person") != null) {
+      Person person = json.deserialize(nodes.get("person"), Person.class);
+      ret.put("PERSON", person);
+    }
+
+    if (nodes.get("company") != null) {
+      Company company = json.deserialize(nodes.get("company"), Company.class);
+      ret.put("COMPANY", company);
+    }
 
     return ret;
   }
