@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 public class WebhookResponse {
 
-  Type type;
-  Object body;
-  int status;
-  String id;
+	Type type;
+	Object body;
+	int status;
+	String id;
 
 }
