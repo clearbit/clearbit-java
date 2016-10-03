@@ -54,6 +54,8 @@ public class Person {
     @JsonProperty String name;
     @JsonProperty String title;
     @JsonProperty String domain;
+    @JsonProperty String role;
+    @JsonProperty String seniority;
   }
 
   @Data
