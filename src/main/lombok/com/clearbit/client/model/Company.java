@@ -18,6 +18,8 @@ public class Company {
 	@JsonProperty List<String> tags;
 	@JsonProperty Category category;
 	@JsonProperty String description;
+	@JsonProperty Integer foundedYear;
+	@JsonProperty String location;
 	@JsonProperty Geo geo;
 	@JsonProperty Metrics metrics;
 	@JsonProperty Facebook facebook;
