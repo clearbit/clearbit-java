@@ -47,6 +47,13 @@ public class WebhookResponseParser {
 
     JsonNode node = json.deserialize(body);
     WebhookResponse response = new WebhookResponse();
+    response.setId(node.get("id").asText());
+    response.setStatus(node.get("status").asInt());
+
+    if (node.get("type").asText().toUpperCase().equals("PERSON_COMPANY")) {
+      return response;
+    }
+
     Type type = Type.valueOf(node.get("type").asText().toUpperCase());
     response.setType(type);
     switch (type) {
@@ -59,8 +66,6 @@ public class WebhookResponseParser {
       default:
         throw new ApiException("Unexpected type: " + type);
     }
-    response.setId(node.get("id").asText());
-    response.setStatus(node.get("status").asInt());
     return response;
   }
 
