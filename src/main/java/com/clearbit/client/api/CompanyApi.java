@@ -77,7 +77,6 @@ public class CompanyApi {
 
   // doReq handles the HTTP request to the API endpoint 
   private Company doReq(String uri) throws ApiException {
-	// req params
 	Object postBody = null;
 	byte[] postBinaryBody = null;
 	
