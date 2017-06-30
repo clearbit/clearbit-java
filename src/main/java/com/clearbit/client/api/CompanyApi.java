@@ -55,6 +55,10 @@ public class CompanyApi {
    * @param domain the company's website domain
    * @return Company
    */
+  public Company lookup(String domain) throws ApiException {
+	  return this.lookup(domain, null);
+  }
+  
   public Company lookup(String domain, String webhookId) throws ApiException {
      // verify the required parameters are set
      if (domain == null) {
