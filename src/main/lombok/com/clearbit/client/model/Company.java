@@ -28,7 +28,6 @@ public class Company {
   @JsonProperty Facebook facebook;
   @JsonProperty LinkedIn linkedin;
   @JsonProperty Twitter twitter;
-  @JsonProperty AngelList angellist;
   @JsonProperty Crunchbase crunchbase;
   @JsonProperty Boolean emailProvider;
   @JsonProperty String type;
