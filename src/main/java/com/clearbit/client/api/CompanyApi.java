@@ -15,6 +15,7 @@ import com.clearbit.client.model.Company;
 public class CompanyApi {
 
   private ApiClient apiClient;
+  private String COMPANY_URL = "https://company.clearbit.com/v2/companies/find";
 
   public CompanyApi() {
     this(Configuration.getDefaultApiClient());
@@ -28,6 +29,8 @@ public class CompanyApi {
     return apiClient;
   }
 
+
+
   /**
    * The Company API lets you lookup company data via a domain name.
    * This is a blocking operation. If the company is not in the Clearbit database,
@@ -38,12 +41,12 @@ public class CompanyApi {
   public Company streamingLookup(String domain) throws ApiException {
     Object postBody = null;
     byte[] postBinaryBody = null;
-    
+
      // verify the required parameters are set
      if (domain == null) {
         throw new ApiException(400, "Missing the required parameter 'domain' when calling CompanyApi.streamingLookup");
      }
-     
+
     // create path and map variables
     String path = "https://company-stream.clearbit.com/v1/companies/domain/{domain}".replaceAll("\\{" + "domain" + "\\}", apiClient.escapeString(domain.toString()));
 
@@ -69,18 +72,17 @@ public class CompanyApi {
   public Company lookup(String domain, String webhookId) throws ApiException {
     Object postBody = null;
     byte[] postBinaryBody = null;
-    
+
      // verify the required parameters are set
      if (domain == null) {
         throw new ApiException(400, "Missing the required parameter 'domain' when calling CompanyApi.lookup");
      }
-     
+
     // create path and map variables
-    String path = "https://company.clearbit.com/v1/companies/domain/{domain}"
-        .replaceAll("\\{" + "domain" + "\\}", apiClient.escapeString(domain.toString()));
+    String path = this.COMPANY_URL + "?domain=" +  apiClient.escapeString(domain.toString());
 
     if (webhookId != null) {
-      path += "?webhook_id=" + apiClient.escapeString(webhookId.toString());
+      path += "&webhook_id=" + apiClient.escapeString(webhookId.toString());
     }
 
     // query params
