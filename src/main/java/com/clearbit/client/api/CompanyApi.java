@@ -30,8 +30,6 @@ public class CompanyApi {
     return apiClient;
   }
 
-
-
   /**
    * The Company API lets you lookup company data via a domain name.
    * This is a blocking operation. If the company is not in the Clearbit database,
@@ -73,21 +71,22 @@ public class CompanyApi {
      return this.doReq(uri);
  }
 
+  // doReq handles the HTTP request to the API endpoint 
   private Company doReq(String uri) throws ApiException {
-	  // req params
-	  Object postBody = null;
-	  byte[] postBinaryBody = null;
+	// req params
+	Object postBody = null;
+	byte[] postBinaryBody = null;
+	
+	// query params
+	List<Pair> queryParams = new ArrayList<Pair>();
+	Map<String, String> headerParams = new HashMap<String, String>();
+	Map<String, Object> formParams = new HashMap<String, Object>();
+	String accept = apiClient.selectHeaderAccept(new String[]{});
+	String contentType = apiClient.selectHeaderContentType(new String[]{});
 
-	  // query params
-	  List<Pair> queryParams = new ArrayList<Pair>();
-	  Map<String, String> headerParams = new HashMap<String, String>();
-	  Map<String, Object> formParams = new HashMap<String, Object>();
-	  String accept = apiClient.selectHeaderAccept(new String[]{});
-	  String contentType = apiClient.selectHeaderContentType(new String[]{});
+	String[] authNames = new String[] { "Basic Authentication" };
 
-	  String[] authNames = new String[] { "Basic Authentication" };
-
-	  TypeRef<Company> returnType = new TypeRef<Company>() {};
-	  return apiClient.invokeAPI(uri, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
+	TypeRef<Company> returnType = new TypeRef<Company>() {};
+	return apiClient.invokeAPI(uri, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
   }
 }
