@@ -15,14 +15,14 @@ public class WebhookResponse {
   }
 
   public void setStatus(int status) {
-	this.status = status;
+    this.status = status;
   }
 
   public void setType(Type type) {
-	this.type = type;
+    this.type = type;
   }
 
   public void setBody(Object obj) {
-	this.body = obj;
+    this.body = obj;
   }
 }
