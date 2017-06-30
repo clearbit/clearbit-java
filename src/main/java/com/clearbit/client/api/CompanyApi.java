@@ -14,7 +14,9 @@ import com.clearbit.client.model.Company;
 
 public class CompanyApi {
 
-  private ApiClient apiClient;
+  private final ApiClient apiClient;
+  private final String URL = "https://company.clearbit.com/v2/companies/find";
+  private final String STREAMING_URL = "https://company-stream.clearbit.com/v2/companies/find";
 
   public CompanyApi() {
     this(Configuration.getDefaultApiClient());
@@ -36,28 +38,15 @@ public class CompanyApi {
    * @return Company
    */
   public Company streamingLookup(String domain) throws ApiException {
-    Object postBody = null;
-    byte[] postBinaryBody = null;
-    
      // verify the required parameters are set
      if (domain == null) {
         throw new ApiException(400, "Missing the required parameter 'domain' when calling CompanyApi.streamingLookup");
      }
-     
-    // create path and map variables
-    String path = "https://company-stream.clearbit.com/v1/companies/domain/{domain}".replaceAll("\\{" + "domain" + "\\}", apiClient.escapeString(domain.toString()));
 
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    Map<String, String> headerParams = new HashMap<String, String>();
-    Map<String, Object> formParams = new HashMap<String, Object>();
-    String accept = apiClient.selectHeaderAccept(new String[]{});
-    String contentType = apiClient.selectHeaderContentType(new String[]{});
+     // create path and add url params
+     String uri = this.STREAMING_URL + "?domain=" + apiClient.escapeString(domain.toString());
 
-    String[] authNames = new String[] { "Basic Authentication" };
-
-    TypeRef<Company> returnType = new TypeRef<Company>() {};
-    return apiClient.invokeAPI(path, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
+     return this.doReq(uri);
   }
 
   /**
@@ -66,34 +55,41 @@ public class CompanyApi {
    * @param domain the company's website domain
    * @return Company
    */
+  public Company lookup(String domain) throws ApiException {
+	  return this.lookup(domain, null);
+  }
+
   public Company lookup(String domain, String webhookId) throws ApiException {
-    Object postBody = null;
-    byte[] postBinaryBody = null;
-    
      // verify the required parameters are set
      if (domain == null) {
         throw new ApiException(400, "Missing the required parameter 'domain' when calling CompanyApi.lookup");
      }
-     
-    // create path and map variables
-    String path = "https://company.clearbit.com/v1/companies/domain/{domain}"
-        .replaceAll("\\{" + "domain" + "\\}", apiClient.escapeString(domain.toString()));
 
-    if (webhookId != null) {
-      path += "?webhook_id=" + apiClient.escapeString(webhookId.toString());
-    }
+     // create path and add url params
+     String uri = this.URL + "?domain=" + apiClient.escapeString(domain.toString());
 
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    Map<String, String> headerParams = new HashMap<String, String>();
-    Map<String, Object> formParams = new HashMap<String, Object>();
-    String accept = apiClient.selectHeaderAccept(new String[]{});
-    String contentType = apiClient.selectHeaderContentType(new String[]{});
+     if (webhookId != null) {
+    	uri += "&webhook_id=" + apiClient.escapeString(webhookId.toString());
+     }
 
-    String[] authNames = new String[] { "Basic Authentication" };
+     return this.doReq(uri);
+ }
 
-    TypeRef<Company> returnType = new TypeRef<Company>() {};
-    return apiClient.invokeAPI(path, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
+  // doReq handles the HTTP request to the API endpoint
+  private Company doReq(String uri) throws ApiException {
+	Object postBody = null;
+	byte[] postBinaryBody = null;
+
+	// query params
+	List<Pair> queryParams = new ArrayList<Pair>();
+	Map<String, String> headerParams = new HashMap<String, String>();
+	Map<String, Object> formParams = new HashMap<String, Object>();
+	String accept = apiClient.selectHeaderAccept(new String[]{});
+	String contentType = apiClient.selectHeaderContentType(new String[]{});
+
+	String[] authNames = new String[] { "Basic Authentication" };
+
+	TypeRef<Company> returnType = new TypeRef<Company>() {};
+	return apiClient.invokeAPI(uri, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
   }
-
 }

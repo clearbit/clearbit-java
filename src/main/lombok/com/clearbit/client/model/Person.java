@@ -14,6 +14,8 @@ public class Person {
   @JsonProperty String email;
   @JsonProperty String gender;
   @JsonProperty String location;
+  @JsonProperty String timeZone;
+  @JsonProperty Long utcOffset;
   @JsonProperty Geo geo;
   @JsonProperty String bio;
   @JsonProperty String site;
@@ -23,13 +25,11 @@ public class Person {
   @JsonProperty Github github;
   @JsonProperty Twitter twitter;
   @JsonProperty LinkedIn linkedin;
-  @JsonProperty GooglePlus googleplus;
-  @JsonProperty AngelList angellist;
-  @JsonProperty Klout klout;
-  @JsonProperty Foursquare foursquare;
   @JsonProperty AboutMe aboutme;
   @JsonProperty Gravatar gravatar;
   @JsonProperty boolean fuzzy;
+  @JsonProperty boolean emailProvider;
+  @JsonProperty String indexedAt;
 
   @Data
   public static class Name {
@@ -90,33 +90,6 @@ public class Person {
 
   @Data
   public static class LinkedIn {
-    @JsonProperty String handle;
-  }
-
-  @Data
-  public static class GooglePlus {
-    @JsonProperty String handle;
-  }
-
-  @Data
-  public static class AngelList {
-    @JsonProperty String handle;
-    @JsonProperty Long id;
-    @JsonProperty String bio;
-    @JsonProperty String blog;
-    @JsonProperty String site;
-    @JsonProperty Long followers;
-    @JsonProperty String avatar;
-  }
-
-  @Data
-  public static class Klout {
-    @JsonProperty String handle;
-    @JsonProperty String score;
-  }
-
-  @Data
-  public static class Foursquare {
     @JsonProperty String handle;
   }
 

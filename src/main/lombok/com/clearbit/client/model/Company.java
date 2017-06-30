@@ -2,9 +2,9 @@ package com.clearbit.client.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Data;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 public class Company {
@@ -14,29 +14,35 @@ public class Company {
   @JsonProperty String legalName;
   @JsonProperty String domain;
   @JsonProperty List<String> domainAliases;
+  @JsonProperty String logo;
   @JsonProperty Site site;
   @JsonProperty List<String> tags;
   @JsonProperty Category category;
   @JsonProperty String description;
   @JsonProperty Integer foundedYear;
   @JsonProperty String location;
+  @JsonProperty String timeZone;
+  @JsonProperty Long utcOffset;
   @JsonProperty Geo geo;
   @JsonProperty Metrics metrics;
   @JsonProperty Facebook facebook;
   @JsonProperty LinkedIn linkedin;
   @JsonProperty Twitter twitter;
-  @JsonProperty AngelList angellist;
   @JsonProperty Crunchbase crunchbase;
-  @JsonProperty String logo;
   @JsonProperty Boolean emailProvider;
   @JsonProperty String type;
+  @JsonProperty String ticker;
   @JsonProperty String phone;
+  @JsonProperty String indexedAt;
   @JsonProperty List<String> tech;
 
   @Data
   public static class Site {
-    @JsonProperty String url;
     @JsonProperty String title;
+    @JsonProperty String h1;
+    @JsonProperty String metaDescription;
+    @JsonProperty List<String> phoneNumbers;
+    @JsonProperty List<String> emailAddresses;
   }
 
   @Data
@@ -64,14 +70,16 @@ public class Company {
 
   @Data
   public static class Metrics {
-    @JsonProperty Long raised;
-    @JsonProperty Long googleRank;
     @JsonProperty Long alexaUsRank;
     @JsonProperty Long alexaGlobalRank;
     @JsonProperty Long employees;
+    @JsonProperty String employeesRange;
     @JsonProperty Long marketCap;
+    @JsonProperty Long raised;
+    @JsonProperty Long annualRevenue;
+    @JsonProperty Long fiscalYearEnd;
   }
-  
+
   @Data
   public static class Facebook {
     @JsonProperty String handle;
