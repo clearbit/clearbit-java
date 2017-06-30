@@ -14,9 +14,9 @@ import com.clearbit.client.model.Company;
 
 public class CompanyApi {
 
-  private ApiClient apiClient;
-  private String COMPANY_URL = "https://company.clearbit.com/v2/companies/find";
-  private String STREAMING_URL = "https://company-stream.clearbit.com/v2/companies/find";
+  private final ApiClient apiClient;
+  private final String URL = "https://company.clearbit.com/v2/companies/find";
+  private final String STREAMING_URL = "https://company-stream.clearbit.com/v2/companies/find";
 
   public CompanyApi() {
     this(Configuration.getDefaultApiClient());
@@ -58,7 +58,7 @@ public class CompanyApi {
   public Company lookup(String domain) throws ApiException {
 	  return this.lookup(domain, null);
   }
-  
+
   public Company lookup(String domain, String webhookId) throws ApiException {
      // verify the required parameters are set
      if (domain == null) {
@@ -66,7 +66,7 @@ public class CompanyApi {
      }
 
      // create path and add url params
-     String uri = this.COMPANY_URL + "?domain=" + apiClient.escapeString(domain.toString());
+     String uri = this.URL + "?domain=" + apiClient.escapeString(domain.toString());
 
      if (webhookId != null) {
     	uri += "&webhook_id=" + apiClient.escapeString(webhookId.toString());
@@ -75,11 +75,11 @@ public class CompanyApi {
      return this.doReq(uri);
  }
 
-  // doReq handles the HTTP request to the API endpoint 
+  // doReq handles the HTTP request to the API endpoint
   private Company doReq(String uri) throws ApiException {
 	Object postBody = null;
 	byte[] postBinaryBody = null;
-	
+
 	// query params
 	List<Pair> queryParams = new ArrayList<Pair>();
 	Map<String, String> headerParams = new HashMap<String, String>();
