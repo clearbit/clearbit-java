@@ -1,33 +1,29 @@
 package com.clearbit;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TimeZone;
-
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status.Family;
-
 import com.clearbit.auth.Authentication;
 import com.clearbit.auth.HttpBasicAuth;
+import com.clearbit.client.model.Company;
+import com.clearbit.client.model.Person;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.file.FileDataBodyPart;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status.Family;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.ByteBuffer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
 
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2015-09-22T18:42:36.139-07:00")
 public class ApiClient {
@@ -316,6 +312,15 @@ public class ApiClient {
     }
   }
 
+  public ByteBuffer serializeToByteBuffer(Object obj) throws ApiException {
+	String serializedObj = serialize(obj, "application/json");
+	byte[] byteArray = serializedObj.getBytes();
+	ByteBuffer byteBuffer = ByteBuffer.allocate(byteArray.length);
+	byteBuffer.put(byteArray);
+	byteBuffer.flip();
+    return byteBuffer;
+  }
+
   /**
    * Serialize the given Java object into string according the given
    * Content-Type (only JSON is supported for now).
@@ -327,6 +332,28 @@ public class ApiClient {
       throw new ApiException(400, "can not serialize object into Content-Type: " + contentType);
     }
   }
+
+  public Map<String, Object> deserializeFromByteArray(byte[] byteArray) throws ApiException {
+    String serialized = new String(byteArray);
+    JsonNode nodes = json.deserialize(serialized);
+    if (nodes.get("body") != null) {
+        nodes = nodes.get("body");
+    }
+
+    Person person = json.deserialize(nodes.get("person"), Person.class);
+    Company company = json.deserialize(nodes.get("company"), Company.class);
+    Map<String, Object> ret = new HashMap<String, Object>();
+    ret.put("PERSON", person);
+    ret.put("COMPANY", company);
+
+    return ret;
+  }
+
+    public <T> T deserializeFromByteBuffer(ByteBuffer byteBuffer, TypeRef<T> returnType) throws ApiException {
+        byte[] ba = byteBuffer.array();
+        String serialized = new String(ba);
+        return deserialize(serialized, returnType);
+    }
 
   /**
    * Deserialize response body to Java object according to the Content-Type.
@@ -350,6 +377,10 @@ public class ApiClient {
     } else {
       throw new ApiException(500, "can not deserialize Content-Type: " + contentType);
     }
+  }
+
+  public <T> T deserialize(String strVal, TypeRef<T> returnType) throws ApiException {
+      return json.deserialize(strVal, returnType);
   }
 
   private ClientResponse getAPIResponse(String path, String method, List<Pair> queryParams, Object body, byte[] binaryBody, Map<String, String> headerParams, Map<String, Object> formParams, String accept, String contentType, String[] authNames) throws ApiException {
