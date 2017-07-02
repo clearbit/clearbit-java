@@ -12,6 +12,7 @@ import com.clearbit.ApiException;
 import com.clearbit.JSON;
 import com.clearbit.client.model.Company;
 import com.clearbit.client.model.Person;
+import com.clearbit.client.model.PersonCompany;
 import com.clearbit.client.model.Type;
 import com.clearbit.client.model.WebhookResponse;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -20,7 +21,7 @@ public class WebhookResponseParser {
 
   private final JSON json = new JSON();
   private final String apiKey;
-  
+
   public WebhookResponseParser(String apiKey) {
     this.apiKey = apiKey;
   }
@@ -55,6 +56,9 @@ public class WebhookResponseParser {
         break;
       case COMPANY:
         response.setBody(json.deserialize(node.get("body"), Company.class));
+        break;
+      case PERSON_COMPANY:
+        response.setBody(json.deserialize(node.get("body"), PersonCompany.class));
         break;
       default:
         throw new ApiException("Unexpected type: " + type);
