@@ -13,7 +13,6 @@ import com.clearbit.TypeRef;
 import com.clearbit.client.model.Person;
 
 public class PersonApi {
-
   private final ApiClient apiClient;
   private final String URL = "https://person.clearbit.com/v2/people/find";
   private final String STREAMING_URL = "https://person-stream.clearbit.com/v2/people/find";
@@ -44,10 +43,11 @@ public class PersonApi {
       throw new ApiException(400, "Missing the required parameter 'email' when calling PersonApi.streamingLookup");
     }
 
-    // create path and map variables
-    String uri = this.STREAMING_URL + "?email=" + apiClient.escapeString(email.toString());
+    // query params
+    List<Pair> params = new ArrayList<Pair>();
+    params.add(new Pair("email", email.toString()));
 
-    return this.doReq(uri);
+    return this.doReq(this.STREAMING_URL, params);
   }
 
   /**
@@ -66,28 +66,26 @@ public class PersonApi {
       throw new ApiException(400, "Missing the required parameter 'email' when calling PersonApi.lookup");
     }
 
-    // create path and add url params
-    String uri = this.URL + "?email=" + apiClient.escapeString(email.toString());
-
+    // query params
+    List<Pair> params = new ArrayList<Pair>();
+    params.add(new Pair("email", email.toString()));
     if (webhookId != null) {
-      uri += "&webhook_id=" + apiClient.escapeString(webhookId.toString());
+      params.add(new Pair("webhook_id", webhookId.toString()));
     }
 
-    return this.doReq(uri);
+    return this.doReq(this.URL, params);
   }
 
-  //doReq handles the HTTP request to the API endpoint
-  private Person doReq(String uri) throws ApiException {
+  // doReq handles the HTTP request to the API endpoint
+  private Person doReq(String uri, List<Pair> queryParams) throws ApiException {
 	Object postBody = null;
 	byte[] postBinaryBody = null;
 
-	// query params
-	List<Pair> queryParams = new ArrayList<Pair>();
 	Map<String, String> headerParams = new HashMap<String, String>();
 	Map<String, Object> formParams = new HashMap<String, Object>();
+
 	String accept = apiClient.selectHeaderAccept(new String[]{});
 	String contentType = apiClient.selectHeaderContentType(new String[]{});
-
 	String[] authNames = new String[] { "Basic Authentication" };
 
 	TypeRef<Person> returnType = new TypeRef<Person>() {};
