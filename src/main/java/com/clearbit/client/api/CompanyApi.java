@@ -13,7 +13,6 @@ import com.clearbit.TypeRef;
 import com.clearbit.client.model.Company;
 
 public class CompanyApi {
-
   private final ApiClient apiClient;
   private final String URL = "https://company.clearbit.com/v2/companies/find";
   private final String STREAMING_URL = "https://company-stream.clearbit.com/v2/companies/find";
@@ -43,10 +42,11 @@ public class CompanyApi {
         throw new ApiException(400, "Missing the required parameter 'domain' when calling CompanyApi.streamingLookup");
      }
 
-     // create path and add url params
-     String uri = this.STREAMING_URL + "?domain=" + apiClient.escapeString(domain.toString());
+     // query params
+     List<Pair> params = new ArrayList<Pair>();
+     params.add(new Pair("domain", domain.toString()));
 
-     return this.doReq(uri);
+     return this.doReq(this.STREAMING_URL, params);
   }
 
   /**
@@ -65,28 +65,26 @@ public class CompanyApi {
         throw new ApiException(400, "Missing the required parameter 'domain' when calling CompanyApi.lookup");
      }
 
-     // create path and add url params
-     String uri = this.URL + "?domain=" + apiClient.escapeString(domain.toString());
-
+     // query params
+     List<Pair> params = new ArrayList<Pair>();
+     params.add(new Pair("domain", domain.toString()));
      if (webhookId != null) {
-    	uri += "&webhook_id=" + apiClient.escapeString(webhookId.toString());
+       params.add(new Pair("webhook_id", webhookId.toString()));
      }
 
-     return this.doReq(uri);
+     return this.doReq(this.URL, params);
  }
 
   // doReq handles the HTTP request to the API endpoint
-  private Company doReq(String uri) throws ApiException {
+  private Company doReq(String uri, List<Pair> queryParams) throws ApiException {
 	Object postBody = null;
 	byte[] postBinaryBody = null;
 
-	// query params
-	List<Pair> queryParams = new ArrayList<Pair>();
 	Map<String, String> headerParams = new HashMap<String, String>();
 	Map<String, Object> formParams = new HashMap<String, Object>();
+
 	String accept = apiClient.selectHeaderAccept(new String[]{});
 	String contentType = apiClient.selectHeaderContentType(new String[]{});
-
 	String[] authNames = new String[] { "Basic Authentication" };
 
 	TypeRef<Company> returnType = new TypeRef<Company>() {};
