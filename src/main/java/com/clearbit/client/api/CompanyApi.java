@@ -94,10 +94,7 @@ public class CompanyApi {
     String contentType = apiClient.selectHeaderContentType(new String[] {});
     String[] authNames = new String[] { "Basic Authentication" };
 
-    TypeRef<Company> returnType = new TypeRef<Company>() {
-    };
-    return apiClient.invokeAPI(uri, "GET", queryParams, postBody,
-        postBinaryBody, headerParams, formParams, accept, contentType,
-        authNames, returnType);
+    TypeRef<Company> returnType = new TypeRef<Company>() {};
+    return apiClient.invokeAPI(uri, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
   }
 }
