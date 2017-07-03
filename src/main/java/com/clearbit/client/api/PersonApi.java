@@ -47,7 +47,7 @@ public class PersonApi {
     List<Pair> params = new ArrayList<Pair>();
     params.add(new Pair("email", email.toString()));
 
-    return this.doReq(this.STREAMING_URL, params);
+    return doReq(STREAMING_URL, params);
   }
 
   /**
@@ -57,7 +57,7 @@ public class PersonApi {
    * @return A cached Person, which may often be null. Registered webhook will receive actual response.
    */
   public Person lookup(String email) throws ApiException {
-    return this.lookup(email, null);
+    return lookup(email, null);
   }
 
   public Person lookup(String email, String webhookId) throws ApiException {
@@ -73,22 +73,22 @@ public class PersonApi {
       params.add(new Pair("webhook_id", webhookId.toString()));
     }
 
-    return this.doReq(this.URL, params);
+    return doReq(URL, params);
   }
 
   // doReq handles the HTTP request to the API endpoint
   private Person doReq(String uri, List<Pair> queryParams) throws ApiException {
-	Object postBody = null;
-	byte[] postBinaryBody = null;
+  	Object postBody = null;
+  	byte[] postBinaryBody = null;
 
-	Map<String, String> headerParams = new HashMap<String, String>();
-	Map<String, Object> formParams = new HashMap<String, Object>();
+  	Map<String, String> headerParams = new HashMap<String, String>();
+  	Map<String, Object> formParams = new HashMap<String, Object>();
 
-	String accept = apiClient.selectHeaderAccept(new String[]{});
-	String contentType = apiClient.selectHeaderContentType(new String[]{});
-	String[] authNames = new String[] { "Basic Authentication" };
+  	String accept = apiClient.selectHeaderAccept(new String[]{});
+  	String contentType = apiClient.selectHeaderContentType(new String[]{});
+  	String[] authNames = new String[] { "Basic Authentication" };
 
-	TypeRef<Person> returnType = new TypeRef<Person>() {};
-	return apiClient.invokeAPI(uri, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
+  	TypeRef<Person> returnType = new TypeRef<Person>() {};
+  	return apiClient.invokeAPI(uri, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
   }
 }

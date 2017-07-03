@@ -47,7 +47,7 @@ public class CombinedApi {
     List<Pair> params = new ArrayList<Pair>();
     params.add(new Pair("email", email.toString()));
 
-    return this.doReq(this.STREAMING_URL, params);
+    return doReq(STREAMING_URL, params);
   }
 
   /**
@@ -57,7 +57,7 @@ public class CombinedApi {
    * @return PersonCompany, which can initially be null. Registered webhook will receive actual response.
    */
   public PersonCompany lookup(String email) throws ApiException {
-    return this.lookup(email, null);
+    return lookup(email, null);
   }
 
   public PersonCompany lookup(String email, String webhookId) throws ApiException {
@@ -73,7 +73,7 @@ public class CombinedApi {
       params.add(new Pair("webhook_id", webhookId.toString()));
     }
 
-    return this.doReq(this.URL, params);
+    return this.doReq(URL, params);
   }
 
   // doReq handles the HTTP request to the API endpoint

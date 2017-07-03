@@ -51,7 +51,7 @@ public class CompanyApi {
     List<Pair> params = new ArrayList<Pair>();
     params.add(new Pair("domain", domain.toString()));
 
-    return this.doReq(this.STREAMING_URL, params);
+    return doReq(STREAMING_URL, params);
   }
 
   /**
@@ -62,7 +62,7 @@ public class CompanyApi {
    * @return Company
    */
   public Company lookup(String domain) throws ApiException {
-    return this.lookup(domain, null);
+    return lookup(domain, null);
   }
 
   public Company lookup(String domain, String webhookId) throws ApiException {
@@ -79,7 +79,7 @@ public class CompanyApi {
       params.add(new Pair("webhook_id", webhookId.toString()));
     }
 
-    return this.doReq(this.URL, params);
+    return doReq(URL, params);
   }
 
   // doReq handles the HTTP request to the API endpoint
