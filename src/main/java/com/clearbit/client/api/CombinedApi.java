@@ -73,7 +73,7 @@ public class CombinedApi {
       params.add(new Pair("webhook_id", webhookId.toString()));
     }
 
-    return this.doReq(URL, params);
+    return doReq(URL, params);
   }
 
   // doReq handles the HTTP request to the API endpoint
