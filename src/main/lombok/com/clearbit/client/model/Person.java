@@ -2,9 +2,9 @@ package com.clearbit.client.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Data;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 public class Person {

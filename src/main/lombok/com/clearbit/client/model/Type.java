@@ -1,8 +1,7 @@
 package com.clearbit.client.model;
 
 public enum Type {
-
   PERSON,
-  COMPANY;
-  
+  COMPANY,
+  PERSON_COMPANY;
 }
