@@ -4,8 +4,7 @@ A Java API client to [https://clearbit.com](https://clearbit.com).
 
 ## Installation
 
-You must currently checkout and build the source
-TODO: deploy to Maven Central
+The client library can be imported from [Maven Central](https://mvnrepository.com/artifact/com.clearbit/client), or users can download source and build locally.
 
 ## Usage
 
@@ -81,3 +80,10 @@ Lombok is used in the model classes to efficiently represent the models without 
 
 Download and install the Lombok plugin:
 https://projectlombok.org/setup/eclipse
+
+## Release
+
+```
+mvn release:prepare
+mvn release:perform
+```
