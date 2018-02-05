@@ -81,6 +81,27 @@ public class CompanyApi {
 
     return doReq(URL, params);
   }
+  
+  public Company lookup(String domain, String webhookId, String webhookUrl) throws ApiException {
+    // verify the required parameters are set
+    if (domain == null) {
+      throw new ApiException(400,
+          "Missing the required parameter 'domain' when calling CompanyApi.lookup");
+    }
+
+    // query params
+    List<Pair> params = new ArrayList<Pair>();
+    params.add(new Pair("domain", domain.toString()));
+    if (webhookId != null) {
+      params.add(new Pair("webhook_id", webhookId.toString()));
+    }
+ 
+    if (webhookUrl != null) {
+      params.add(new Pair("webhook_url",webhookUrl));
+    }
+    
+    return doReq(URL, params);
+  }
 
   // doReq handles the HTTP request to the API endpoint
   private Company doReq(String uri, List<Pair> queryParams) throws ApiException {
