@@ -76,6 +76,29 @@ public class PersonApi {
     return doReq(URL, params);
   }
 
+  //Include custom webhook url for lookup call
+  public Person lookup(String email, String webhookId, String webhookUrl) throws ApiException {
+    // verify the required parameter 'email' is set
+    if (email == null) {
+      throw new ApiException(400, "Missing the required parameter 'email' when calling PersonApi.lookup");
+    }
+
+    // query params
+    List<Pair> params = new ArrayList<Pair>();
+    params.add(new Pair("email", email.toString()));
+    if (webhookId != null) {
+      params.add(new Pair("webhook_id", webhookId.toString()));
+    }
+
+    if (webhookUrl != null) {
+      params.add(new Pair("webhook_url",webhookUrl));
+    }
+
+    System.out.println(params);
+
+    return doReq(URL, params);
+  }
+
   // doReq handles the HTTP request to the API endpoint
   private Person doReq(String uri, List<Pair> queryParams) throws ApiException {
   	Object postBody = null;
