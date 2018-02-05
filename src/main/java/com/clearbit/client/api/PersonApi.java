@@ -94,8 +94,6 @@ public class PersonApi {
       params.add(new Pair("webhook_url",webhookUrl));
     }
 
-    System.out.println(params);
-
     return doReq(URL, params);
   }
 
