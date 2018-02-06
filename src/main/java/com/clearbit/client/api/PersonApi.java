@@ -61,19 +61,7 @@ public class PersonApi {
   }
 
   public Person lookup(String email, String webhookId) throws ApiException {
-    // verify the required parameter 'email' is set
-    if (email == null) {
-      throw new ApiException(400, "Missing the required parameter 'email' when calling PersonApi.lookup");
-    }
-
-    // query params
-    List<Pair> params = new ArrayList<Pair>();
-    params.add(new Pair("email", email.toString()));
-    if (webhookId != null) {
-      params.add(new Pair("webhook_id", webhookId.toString()));
-    }
-
-    return doReq(URL, params);
+    return lookup(email,webhookId,null);
   }
 
   //Include custom webhook url for lookup call
@@ -86,12 +74,13 @@ public class PersonApi {
     // query params
     List<Pair> params = new ArrayList<Pair>();
     params.add(new Pair("email", email.toString()));
+    
     if (webhookId != null) {
       params.add(new Pair("webhook_id", webhookId.toString()));
     }
 
     if (webhookUrl != null) {
-      params.add(new Pair("webhook_url",webhookUrl));
+      params.add(new Pair("webhook_url", webhookUrl));
     }
 
     return doReq(URL, params);
