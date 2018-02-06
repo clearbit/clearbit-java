@@ -66,6 +66,10 @@ public class CompanyApi {
   }
 
   public Company lookup(String domain, String webhookId) throws ApiException {
+    return lookup(domain, webhookId, null);
+  }
+  
+  public Company lookup(String domain, String webhookId, String webhookUrl) throws ApiException {
     // verify the required parameters are set
     if (domain == null) {
       throw new ApiException(400,
@@ -75,10 +79,15 @@ public class CompanyApi {
     // query params
     List<Pair> params = new ArrayList<Pair>();
     params.add(new Pair("domain", domain.toString()));
+    
     if (webhookId != null) {
       params.add(new Pair("webhook_id", webhookId.toString()));
     }
-
+ 
+    if (webhookUrl != null) {
+      params.add(new Pair("webhook_url", webhookUrl));
+    }
+    
     return doReq(URL, params);
   }
 
