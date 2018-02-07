@@ -341,7 +341,7 @@ public class ApiClient {
 
     String body;
     if (response.hasEntity())
-      body = (String) response.getEntity(String.class);
+      body = response.getEntity(String.class);
     else
       body = "";
 
@@ -412,7 +412,7 @@ public class ApiClient {
     ClientResponse response = null;
 
     if ("GET".equals(method)) {
-      response = (ClientResponse) builder.get(ClientResponse.class);
+      response = builder.get(ClientResponse.class);
     } else if ("POST".equals(method)) {
       if (encodedFormParams != null) {
         response = builder.type(contentType).post(ClientResponse.class, encodedFormParams);

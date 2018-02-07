@@ -13,8 +13,9 @@ import com.clearbit.TypeRef;
 import com.clearbit.client.model.Person;
 
 public class PersonApi {
-
-  private ApiClient apiClient;
+  private final ApiClient apiClient;
+  private final String URL = "https://person.clearbit.com/v2/people/find";
+  private final String STREAMING_URL = "https://person-stream.clearbit.com/v2/people/find";
 
   public PersonApi() {
     this(Configuration.getDefaultApiClient());
@@ -37,28 +38,16 @@ public class PersonApi {
    * @return Person
    */
   public Person streamingLookup(String email) throws ApiException {
-    Object postBody = null;
-    byte[] postBinaryBody = null;
-    
-     // verify the required parameters are set
-     if (email == null) {
-        throw new ApiException(400, "Missing the required parameter 'email' when calling PersonApi.streamingLookup");
-     }
-     
-    // create path and map variables
-    String path = "https://person-stream.clearbit.com/v1/people/email/{email}".replaceAll("\\{" + "email" + "\\}", apiClient.escapeString(email.toString()));
+    // verify the required parameters are set
+    if (email == null) {
+      throw new ApiException(400, "Missing the required parameter 'email' when calling PersonApi.streamingLookup");
+    }
 
     // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    Map<String, String> headerParams = new HashMap<String, String>();
-    Map<String, Object> formParams = new HashMap<String, Object>();
-    String accept = apiClient.selectHeaderAccept(new String[]{});
-    String contentType = apiClient.selectHeaderContentType(new String[]{});
+    List<Pair> params = new ArrayList<Pair>();
+    params.add(new Pair("email", email.toString()));
 
-    String[] authNames = new String[] { "Basic Authentication" };
-
-    TypeRef<Person> returnType = new TypeRef<Person>() {};
-    return apiClient.invokeAPI(path, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    return doReq(STREAMING_URL, params);
   }
 
   /**
@@ -67,34 +56,49 @@ public class PersonApi {
    * @param email the person’s email address
    * @return A cached Person, which may often be null. Registered webhook will receive actual response.
    */
-  public Person lookup(String email, String webhookId) throws ApiException {
-    Object postBody = null;
-    byte[] postBinaryBody = null;
-    
-     // verify the required parameter 'email' is set
-     if (email == null) {
-        throw new ApiException(400, "Missing the required parameter 'email' when calling PersonApi.lookup");
-     }
-     
-    // create path and map variables
-    String path = "https://person.clearbit.com/v1/people/email/{email}"
-        .replaceAll("\\{" + "email" + "\\}", apiClient.escapeString(email.toString()));
+  public Person lookup(String email) throws ApiException {
+    return lookup(email, null);
+  }
 
-    if (webhookId != null) {
-      path += "?webhook_id=" + apiClient.escapeString(webhookId.toString());
+  public Person lookup(String email, String webhookId) throws ApiException {
+    return lookup(email,webhookId,null);
+  }
+
+  //Include custom webhook url for lookup call
+  public Person lookup(String email, String webhookId, String webhookUrl) throws ApiException {
+    // verify the required parameter 'email' is set
+    if (email == null) {
+      throw new ApiException(400, "Missing the required parameter 'email' when calling PersonApi.lookup");
     }
 
     // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    Map<String, String> headerParams = new HashMap<String, String>();
-    Map<String, Object> formParams = new HashMap<String, Object>();
-    String accept = apiClient.selectHeaderAccept(new String[]{});
-    String contentType = apiClient.selectHeaderContentType(new String[]{});
+    List<Pair> params = new ArrayList<Pair>();
+    params.add(new Pair("email", email.toString()));
+    
+    if (webhookId != null) {
+      params.add(new Pair("webhook_id", webhookId.toString()));
+    }
 
-    String[] authNames = new String[] { "Basic Authentication" };
+    if (webhookUrl != null) {
+      params.add(new Pair("webhook_url", webhookUrl));
+    }
 
-    TypeRef<Person> returnType = new TypeRef<Person>() {};
-    return apiClient.invokeAPI(path, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    return doReq(URL, params);
   }
 
+  // doReq handles the HTTP request to the API endpoint
+  private Person doReq(String uri, List<Pair> queryParams) throws ApiException {
+  	Object postBody = null;
+  	byte[] postBinaryBody = null;
+
+  	Map<String, String> headerParams = new HashMap<String, String>();
+  	Map<String, Object> formParams = new HashMap<String, Object>();
+
+  	String accept = apiClient.selectHeaderAccept(new String[]{});
+  	String contentType = apiClient.selectHeaderContentType(new String[]{});
+  	String[] authNames = new String[] { "Basic Authentication" };
+
+  	TypeRef<Person> returnType = new TypeRef<Person>() {};
+  	return apiClient.invokeAPI(uri, "GET", queryParams, postBody, postBinaryBody, headerParams, formParams, accept, contentType, authNames, returnType);
+  }
 }
