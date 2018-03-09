@@ -35,6 +35,7 @@ public class Company {
   @JsonProperty String phone;
   @JsonProperty String indexedAt;
   @JsonProperty List<String> tech;
+  @JsonProperty Parent parent;
 
   @Data
   public static class Site {
@@ -78,6 +79,7 @@ public class Company {
     @JsonProperty Long raised;
     @JsonProperty Long annualRevenue;
     @JsonProperty Long fiscalYearEnd;
+    @JsonProperty String estimatedAnnualRevenue;
   }
 
   @Data
@@ -115,5 +117,10 @@ public class Company {
   @Data
   public static class Crunchbase {
     @JsonProperty String handle;
+  }
+
+  @Data
+  public static class Parent {
+    @JsonProperty String domain;
   }
 }
