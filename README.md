@@ -70,9 +70,11 @@ switch (response.getType()) {
 
 Currently streaming for the following APIs is supported:
 
-* Person
-* Company
-* Combined (PersonCompany)
+* [Person API](https://github.com/clearbit/clearbit-java/blob/master/src/main/java/com/clearbit/client/api/PersonApi.java#L32-L39)
+* [Company API](https://github.com/clearbit/clearbit-java/blob/master/src/main/java/com/clearbit/client/api/CompanyApi.java#L32-L41)
+* [Combined API](https://github.com/clearbit/clearbit-java/blob/master/src/main/java/com/clearbit/client/api/CombinedApi.java#L53-L58) (PersonCompany)
+
+Please see the Clearbit docs for more information https://clearbit.com/docs
 
 ## Implementation Notes
 
