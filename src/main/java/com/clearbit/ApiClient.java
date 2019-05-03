@@ -17,17 +17,23 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
+
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.ClientResponse;
+import org.glassfish.jersey.filter.LoggingFilter;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
 import com.clearbit.auth.Authentication;
 import com.clearbit.auth.HttpBasicAuth;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource.Builder;
-import com.sun.jersey.api.client.filter.LoggingFilter;
-import com.sun.jersey.multipart.FormDataMultiPart;
-import com.sun.jersey.multipart.file.FileDataBodyPart;
 
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2015-09-22T18:42:36.139-07:00")
 public class ApiClient {
@@ -341,7 +347,7 @@ public class ApiClient {
 
     String body;
     if (response.hasEntity())
-      body = response.getEntity(String.class);
+      body = response.getEntity().toString();
     else
       body = "";
 
@@ -377,11 +383,9 @@ public class ApiClient {
 
     String querystring = b.substring(0, b.length() - 1);
 
-    Builder builder;
-    if (accept == null)
-      builder = client.resource(basePath + path + querystring).getRequestBuilder();
-    else
-      builder = client.resource(basePath + path + querystring).accept(accept);
+    Invocation.Builder builder = client.target(basePath + path + querystring).request();
+    if (accept != null)
+      builder.accept(accept);
 
     for (String key : headerParams.keySet()) {
       builder = builder.header(key, headerParams.get(key));
@@ -415,38 +419,38 @@ public class ApiClient {
       response = builder.get(ClientResponse.class);
     } else if ("POST".equals(method)) {
       if (encodedFormParams != null) {
-        response = builder.type(contentType).post(ClientResponse.class, encodedFormParams);
+        response = builder.buildPost(Entity.entity(encodedFormParams, contentType)).invoke(ClientResponse.class);
       } else if (body == null) {
         if(binaryBody == null)
-            response = builder.post(ClientResponse.class, null);
+            response = builder.buildPost(Entity.entity(null, contentType)).invoke(ClientResponse.class);
         else
-            response = builder.type(contentType).post(ClientResponse.class, binaryBody);
+            response = builder.buildPost(Entity.entity(binaryBody, contentType)).invoke(ClientResponse.class);
       } else if (body instanceof FormDataMultiPart) {
-        response = builder.type(contentType).post(ClientResponse.class, body);
+        response = builder.buildPost(Entity.entity(body, contentType)).invoke(ClientResponse.class);
       } else {
-        response = builder.type(contentType).post(ClientResponse.class, serialize(body, contentType));
+        response = builder.buildPost(Entity.entity(serialize(body, contentType), contentType)).invoke(ClientResponse.class);
       }
     } else if ("PUT".equals(method)) {
       if (encodedFormParams != null) {
-        response = builder.type(contentType).put(ClientResponse.class, encodedFormParams);
+        response = builder.buildPut(Entity.entity(encodedFormParams, contentType)).invoke(ClientResponse.class);
       } else if(body == null) {
         if(binaryBody == null)
-            response = builder.put(ClientResponse.class, null);
+            response = builder.buildPut(Entity.entity(null, contentType)).invoke(ClientResponse.class);
         else
-            response = builder.type(contentType).put(ClientResponse.class, binaryBody);
+            response = builder.buildPut(Entity.entity(binaryBody, contentType)).invoke(ClientResponse.class);
       } else {
-        response = builder.type(contentType).put(ClientResponse.class, serialize(body, contentType));
+        response = builder.buildPut(Entity.entity(serialize(body, contentType), contentType)).invoke(ClientResponse.class);
       }
     } else if ("DELETE".equals(method)) {
       if (encodedFormParams != null) {
-        response = builder.type(contentType).delete(ClientResponse.class, encodedFormParams);
+        response = builder.build("DELETE", Entity.entity(encodedFormParams, contentType)).invoke(ClientResponse.class);
       } else if(body == null) {
         if(binaryBody == null)
             response = builder.delete(ClientResponse.class);
         else
-            response = builder.type(contentType).delete(ClientResponse.class, binaryBody);
+            response = builder.build("DELETE", Entity.entity(binaryBody, contentType)).invoke(ClientResponse.class);
       } else {
-        response = builder.type(contentType).delete(ClientResponse.class, serialize(body, contentType));
+        response = builder.build("DELETE", Entity.entity(serialize(body, contentType), contentType)).invoke(ClientResponse.class);
       }
     } else {
       throw new ApiException(500, "unknown method type " + method);
@@ -476,8 +480,8 @@ public class ApiClient {
     statusCode = response.getStatusInfo().getStatusCode();
     responseHeaders = response.getHeaders();
 
-    if(statusCode == ClientResponse.Status.NOT_FOUND.getStatusCode()
-        || statusCode == ClientResponse.Status.ACCEPTED.getStatusCode()) {
+    if(statusCode == Status.NOT_FOUND.getStatusCode()
+        || statusCode == Status.ACCEPTED.getStatusCode()) {
       return null;
     } else if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
       if (returnType == null)
@@ -489,7 +493,7 @@ public class ApiClient {
       String respBody = null;
       if (response.hasEntity()) {
         try {
-          respBody = String.valueOf(response.getEntity(String.class));
+          respBody = String.valueOf(response.getEntity());
           message = respBody;
         } catch (RuntimeException e) {
           // e.printStackTrace();
@@ -521,18 +525,18 @@ public class ApiClient {
 
     ClientResponse response = getAPIResponse(path, method, queryParams, body, binaryBody, headerParams, formParams, accept, contentType, authNames);
 
-    if(response.getStatusInfo() == ClientResponse.Status.NO_CONTENT) {
+    if(response.getStatusInfo() == Status.NO_CONTENT) {
       return null;
     }
     else if(response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
       if(response.hasEntity()) {
-    	DataInputStream stream = new DataInputStream(response.getEntityInputStream());
-    	byte[] data = new byte[response.getLength()];
-    	try {
-    	  stream.readFully(data);
-    	} catch (IOException ex) {
-    	  throw new ApiException(500, "Error obtaining binary response data");
-    	}
+        DataInputStream stream = new DataInputStream(response.getEntityStream());
+        byte[] data = new byte[response.getLength()];
+        try {
+          stream.readFully(data);
+        } catch (IOException ex) {
+          throw new ApiException(500, "Error obtaining binary response data");
+        }
         return data;
       }
       else {
@@ -543,7 +547,7 @@ public class ApiClient {
       String message = "error";
       if(response.hasEntity()) {
         try{
-          message = String.valueOf(response.getEntity(String.class));
+          message = String.valueOf(response.getEntity().toString());
         }
         catch (RuntimeException e) {
           // e.printStackTrace();
@@ -600,12 +604,14 @@ public class ApiClient {
    */
   public Client getClient() {
     if(!hostMap.containsKey(basePath)) {
-      Client client = Client.create();
-      client.setConnectTimeout(10000);
-      client.setReadTimeout(20000);
+      ClientConfig clientConfig = new ClientConfig()
+          .property(ClientProperties.CONNECT_TIMEOUT, 10000)
+          .property(ClientProperties.READ_TIMEOUT, 20000);
+
       if (debugging)
-        client.addFilter(new LoggingFilter());
-      hostMap.put(basePath, client);
+        clientConfig.register(LoggingFilter.class);
+
+      hostMap.put(basePath, ClientBuilder.newClient(clientConfig));
     }
     return hostMap.get(basePath);
   }
