@@ -347,7 +347,7 @@ public class ApiClient {
 
     String body;
     if (response.hasEntity())
-      body = response.getEntity().toString();
+      body = response.readEntity(String.class);
     else
       body = "";
 
@@ -493,7 +493,7 @@ public class ApiClient {
       String respBody = null;
       if (response.hasEntity()) {
         try {
-          respBody = String.valueOf(response.getEntity());
+          respBody = response.readEntity(String.class);
           message = respBody;
         } catch (RuntimeException e) {
           // e.printStackTrace();
@@ -547,7 +547,7 @@ public class ApiClient {
       String message = "error";
       if(response.hasEntity()) {
         try{
-          message = String.valueOf(response.getEntity().toString());
+          message = response.readEntity(String.class);
         }
         catch (RuntimeException e) {
           // e.printStackTrace();
